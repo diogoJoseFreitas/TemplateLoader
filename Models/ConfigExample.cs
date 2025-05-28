@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
+// Removed: using System.Threading.Tasks; // Não é necessário para operações síncronas
 
-// Define a class to represent your configuration settings
+// Define uma classe para representar as configurações da sua aplicação
 public class AppSettings
 {
     public string ApiKey { get; set; }
@@ -24,19 +24,19 @@ public class JsonConfigManager
 
     public JsonConfigManager(string configFileName = "appsettings.json")
     {
-        // Get the directory of the current executable and combine it with the config file name.
-        // This ensures the config file is alongside the application.
+        // Obtém o diretório do executável atual e combina com o nome do arquivo de configuração.
+        // Isso garante que o arquivo de configuração esteja junto com a aplicação.
         _configFilePath = Path.Combine(AppContext.BaseDirectory, configFileName);
     }
 
     /// <summary>
-    /// Creates a default JSON configuration file if it doesn't exist.
+    /// Cria um arquivo de configuração JSON padrão se ele não existir.
     /// </summary>
-    public async Task CreateDefaultConfigAsync()
+    public void CreateDefaultConfig() // Alterado de async Task para void
     {
         if (!File.Exists(_configFilePath))
         {
-            Console.WriteLine($"Creating default JSON configuration file: {_configFilePath}");
+            Console.WriteLine($"Criando arquivo de configuração JSON padrão: {_configFilePath}");
             var defaultSettings = new AppSettings
             {
                 ApiKey = "your_default_api_key_here",
@@ -49,110 +49,72 @@ public class JsonConfigManager
                 }
             };
 
-            // Configure JsonSerializerOptions for pretty printing
+            // Configura JsonSerializerOptions para formatação bonita (indentação)
             var options = new JsonSerializerOptions { WriteIndented = true };
 
-            // Serialize the settings object to a JSON string
+            // Serializa o objeto de configurações para uma string JSON
             string jsonString = JsonSerializer.Serialize(defaultSettings, options);
 
-            // Write the JSON string to the file asynchronously
-            await File.WriteAllTextAsync(_configFilePath, jsonString);
-            Console.WriteLine("Default JSON config file created successfully.");
+            // Escreve a string JSON no arquivo (síncronamente)
+            File.WriteAllText(_configFilePath, jsonString); // Alterado de await File.WriteAllTextAsync
+            Console.WriteLine("Arquivo de configuração JSON padrão criado com sucesso.");
         }
         else
         {
-            Console.WriteLine($"JSON configuration file already exists at: {_configFilePath}");
+            Console.WriteLine($"Arquivo de configuração JSON já existe em: {_configFilePath}");
         }
     }
 
     /// <summary>
-    /// Reads the JSON configuration file and returns the AppSettings object.
+    /// Lê o arquivo de configuração JSON e retorna o objeto AppSettings.
     /// </summary>
-    /// <returns>The AppSettings object, or null if the file cannot be read.</returns>
-    public async Task<AppSettings> ReadConfigAsync()
+    /// <returns>O objeto AppSettings, ou null se o arquivo não puder ser lido.</returns>
+    public AppSettings ReadConfig() // Alterado de async Task<AppSettings> para AppSettings
     {
         if (!File.Exists(_configFilePath))
         {
-            Console.WriteLine($"Error: JSON configuration file not found at {_configFilePath}");
+            Console.WriteLine($"Erro: Arquivo de configuração JSON não encontrado em {_configFilePath}");
             return null;
         }
 
         try
         {
-            // Read the entire file content asynchronously
-            string jsonString = await File.ReadAllTextAsync(_configFilePath);
+            // Lê todo o conteúdo do arquivo (síncronamente)
+            string jsonString = File.ReadAllText(_configFilePath); // Alterado de await File.ReadAllTextAsync
 
-            // Deserialize the JSON string back into an AppSettings object
+            // Desserializa a string JSON de volta para um objeto AppSettings
             var settings = JsonSerializer.Deserialize<AppSettings>(jsonString);
-            Console.WriteLine("JSON configuration loaded successfully.");
+            Console.WriteLine("Configuração JSON carregada com sucesso.");
             return settings;
         }
         catch (JsonException ex)
         {
-            Console.WriteLine($"Error parsing JSON configuration: {ex.Message}");
+            Console.WriteLine($"Erro ao analisar a configuração JSON: {ex.Message}");
             return null;
         }
         catch (IOException ex)
         {
-            Console.WriteLine($"Error reading JSON file: {ex.Message}");
+            Console.WriteLine($"Erro ao ler o arquivo JSON: {ex.Message}");
             return null;
         }
     }
 
     /// <summary>
-    /// Updates a specific setting in the configuration and saves the file.
-    /// Note: This reads the whole file, modifies, and writes back. For very large configs,
-    /// consider more sophisticated partial update strategies if performance is critical.
+    /// Atualiza uma configuração específica e salva o arquivo.
+    /// Nota: Isso lê o arquivo inteiro, modifica e o escreve de volta. Para configurações muito grandes,
+    /// considere estratégias de atualização parcial mais sofisticadas se o desempenho for crítico.
     /// </summary>
-    /// <param name="newApiKey">The new API key to set.</param>
-    public async Task UpdateApiKeyAsync(string newApiKey)
+    /// <param name="newApiKey">A nova chave de API a ser definida.</param>
+    public void UpdateApiKey(string newApiKey) // Alterado de async Task para void
     {
-        var settings = await ReadConfigAsync();
+        var settings = ReadConfig(); // Chamada síncrona
         if (settings != null)
         {
             settings.ApiKey = newApiKey;
             var options = new JsonSerializerOptions { WriteIndented = true };
             string jsonString = JsonSerializer.Serialize(settings, options);
-            await File.WriteAllTextAsync(_configFilePath, jsonString);
-            Console.WriteLine($"API Key updated to '{newApiKey}' in JSON config.");
+            File.WriteAllText(_configFilePath, jsonString); // Chamada síncrona
+            Console.WriteLine($"Chave de API atualizada para '{newApiKey}' na configuração JSON.");
         }
     }
 }
-
-// // Example usage in a main method (e.g., in Program.cs)
-// public class Program
-// {
-//     public static async Task Main(string[] args)
-//     {
-//         Console.WriteLine("--- JSON Configuration Example ---");
-//         var jsonConfigManager = new JsonConfigManager();
-
-//         // 1. Create default config if it doesn't exist
-//         await jsonConfigManager.CreateDefaultConfigAsync();
-
-//         // 2. Read config
-//         AppSettings settings = await jsonConfigManager.ReadConfigAsync();
-
-//         if (settings != null)
-//         {
-//             Console.WriteLine("\nLoaded JSON Settings:");
-//             Console.WriteLine($"API Key: {settings.ApiKey}");
-//             Console.WriteLine($"Max Retries: {settings.MaxRetries}");
-//             Console.WriteLine($"Enable Feature X: {settings.EnableFeatureX}");
-//             Console.WriteLine($"DB Connection String: {settings.Database.ConnectionString}");
-//             Console.WriteLine($"DB Timeout: {settings.Database.TimeoutSeconds} seconds");
-
-//             // 3. Update a setting and save
-//             await jsonConfigManager.UpdateApiKeyAsync("new_updated_api_key_123");
-
-//             // 4. Read again to confirm update
-//             settings = await jsonConfigManager.ReadConfigAsync();
-//             if (settings != null)
-//             {
-//                 Console.WriteLine("\nLoaded JSON Settings after update:");
-//                 Console.WriteLine($"API Key: {settings.ApiKey}");
-//             }
-//         }
-//         Console.WriteLine("\n--- End JSON Configuration Example ---\n");
-//     }
-// }
