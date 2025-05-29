@@ -4,14 +4,19 @@ using TemplateLoader.Models;
 
 var menuConfigs = new Menu();
 var menuMain = new Menu();
+var menuCopiarTemplate = new Menu();
 
 menuConfigs.AddMenuItem("Voltar", menuMain);
 menuConfigs.AddMenuItem("Configurar Pasta de Templates");
+menuConfigs.AddMenuItem("Listar Pasta de Templates");
+
+
+menuCopiarTemplate.AddMenuItem("Voltar", menuMain);
 
 
 menuMain.AddMenuItem("Sair", new ExitAction());
+menuMain.AddMenuItem("Copiar Template", menuCopiarTemplate);
 menuMain.AddMenuItem("Configurações", menuConfigs);
-menuMain.AddMenuItem("Voltar");
 
 Console.WriteLine("Hello, World!");
 
