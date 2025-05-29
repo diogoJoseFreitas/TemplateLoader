@@ -2,13 +2,25 @@ using System.Text.Json;
 
 namespace TemplateLoader.Settings
 {
-    public static class ConfigManager
+    public class JsonConfigManager : IConfigManager
     {
-        private static string configFileName = "TemplateLoaderSettings.json";
-        private static string _configFilePath = Path.Combine(AppContext.BaseDirectory, configFileName);
-        public static AppSettings? ReadConfig()
+        private string _configFileName;
+        private string _configFilePath;
+
+        public JsonConfigManager(string configFileName = "TemplateLoaderSettings.json")
         {
-            if (!File.Exists(_configFilePath))
+            _configFileName = configFileName;
+            _configFilePath = Path.Combine(AppContext.BaseDirectory, _configFileName);
+        }
+
+        public bool IsConfigured()
+        {
+            return File.Exists(_configFilePath);
+        }
+
+        public AppSettings? ReadConfig()
+        {
+            if (!IsConfigured())
                 return null;
 
             try
@@ -17,7 +29,7 @@ namespace TemplateLoader.Settings
 
                 var settings = JsonSerializer.Deserialize<AppSettings>(jsonString);
 
-                Console.WriteLine("Configuração JSON carregada com sucesso.");
+                Console.WriteLine($"Carregando templates disponíveis em: {settings.TemplateFolder}");
 
                 return settings;
             }
@@ -34,7 +46,7 @@ namespace TemplateLoader.Settings
 
         }
 
-        public static void WriteConfig(AppSettings appSettings)
+        public void WriteConfig(AppSettings appSettings)
         {
             Console.WriteLine($"Criando arquivo de configuração JSON padrão: {_configFilePath}");
 
