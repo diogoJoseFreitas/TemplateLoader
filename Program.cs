@@ -1,21 +1,17 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using TemplateLoader.Models;
+using TemplateLoader.Menus;
 
-var menuConfigs = new Menu();
-var menuMain = new Menu();
-var menuCopiarTemplate = new Menu();
+var menuMain = new MainMenu();
+var menuConfigs = new SubMenu(menuMain);
+var menuCopiarTemplate = new SubMenu(menuMain);
+
+menuMain.AddMenuItem("Copiar Template", menuCopiarTemplate);
+menuMain.AddMenuItem("Configurações", menuConfigs);
 
 menuConfigs.AddMenuItem("Configurar Pasta de Templates");
 menuConfigs.AddMenuItem("Listar Pasta de Templates");
 
-
-menuCopiarTemplate.AddMenuItem("Voltar", menuMain);
-
-
-menuMain.AddMenuItem("Sair", new ExitAction());
-menuMain.AddMenuItem("Copiar Template", menuCopiarTemplate);
-menuMain.AddMenuItem("Configurações", menuConfigs);
 
 Console.WriteLine("Hello, World!");
 

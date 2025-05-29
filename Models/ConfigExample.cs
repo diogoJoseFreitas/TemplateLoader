@@ -22,7 +22,7 @@ public class JsonConfigManager
 {
     private readonly string _configFilePath;
 
-    public JsonConfigManager(string configFileName = "appsettings.json")
+    public JsonConfigManager(string configFileName = "TemplateLoaderSettings.json")
     {
         // Obtém o diretório do executável atual e combina com o nome do arquivo de configuração.
         // Isso garante que o arquivo de configuração esteja junto com a aplicação.
