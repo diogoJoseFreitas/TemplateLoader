@@ -4,13 +4,12 @@ namespace TemplateLoader.Menus
     {
         public MainMenu()
         {
-            AddMenuItem("Sair", new ExitAction());
+            AddMenuItem("Sair", ExitAction);
         }
-
-        public void Start()
+        public void ExitAction()
         {
-            Do();
+            Console.WriteLine("Saindo do programa...");
+            Environment.Exit(0);            
         }
-            
     }    
 }

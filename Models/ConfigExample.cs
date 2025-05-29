@@ -1,22 +1,10 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using TemplateLoader.Settings;
 // Removed: using System.Threading.Tasks; // Não é necessário para operações síncronas
 
 // Define uma classe para representar as configurações da sua aplicação
-public class AppSettings
-{
-    public string ApiKey { get; set; }
-    public int MaxRetries { get; set; }
-    public bool EnableFeatureX { get; set; }
-    public DatabaseSettings Database { get; set; }
-}
-
-public class DatabaseSettings
-{
-    public string ConnectionString { get; set; }
-    public int TimeoutSeconds { get; set; }
-}
 
 public class JsonConfigManager
 {
@@ -39,14 +27,7 @@ public class JsonConfigManager
             Console.WriteLine($"Criando arquivo de configuração JSON padrão: {_configFilePath}");
             var defaultSettings = new AppSettings
             {
-                ApiKey = "your_default_api_key_here",
-                MaxRetries = 3,
-                EnableFeatureX = true,
-                Database = new DatabaseSettings
-                {
-                    ConnectionString = "Server=.;Database=MyDb;Integrated Security=True;",
-                    TimeoutSeconds = 30
-                }
+                TemplateFolder = "your_default_api_key_here"
             };
 
             // Configura JsonSerializerOptions para formatação bonita (indentação)
@@ -110,7 +91,7 @@ public class JsonConfigManager
         var settings = ReadConfig(); // Chamada síncrona
         if (settings != null)
         {
-            settings.ApiKey = newApiKey;
+            settings.TemplateFolder = newApiKey;
             var options = new JsonSerializerOptions { WriteIndented = true };
             string jsonString = JsonSerializer.Serialize(settings, options);
             File.WriteAllText(_configFilePath, jsonString); // Chamada síncrona
