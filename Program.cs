@@ -6,7 +6,6 @@ var menuConfigs = new Menu();
 var menuMain = new Menu();
 var menuCopiarTemplate = new Menu();
 
-menuConfigs.AddMenuItem("Voltar", menuMain);
 menuConfigs.AddMenuItem("Configurar Pasta de Templates");
 menuConfigs.AddMenuItem("Listar Pasta de Templates");
 

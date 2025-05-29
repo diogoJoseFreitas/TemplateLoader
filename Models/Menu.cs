@@ -14,18 +14,18 @@ namespace TemplateLoader.Models
             return text;
         }
     }
-    
+
     public class ExitAction : Action
     {
         public void Do()
         {
             Console.WriteLine("Saindo do programa...");
-            Environment.Exit(0); 
+            Environment.Exit(0);
         }
     }
-    public class Menu : Action
+    public abstract class Menu : Action
     {
-        private List<MenuItem> Itens { get; set; } = [];
+        protected List<MenuItem> Itens { get; set; } = [];
 
         public void Do()
         {
@@ -56,5 +56,20 @@ namespace TemplateLoader.Models
             Itens.Add(new MenuItem() { text = text, subMenu = action });
         }
 
+    }
+    public class MainMenu : Menu
+    {
+        public MainMenu()
+        {
+            AddMenuItem("Sair", new ExitAction());
+        }
+    }
+
+    public class SubMenu : Menu
+    {
+        public SubMenu(Menu previousMenu)
+        {
+            AddMenuItem("Voltar", previousMenu);
+        }
     }
 }
