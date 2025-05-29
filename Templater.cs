@@ -11,7 +11,7 @@ namespace TemplateLoader
         {
             Manager = new JsonConfigManager("TemplateLoaderSettings.json");
             if (!Manager.IsConfigured())
-            {                
+            {
                 Console.WriteLine("Para seguir, é necessário primeiro configurar a pasta onde serão armazenados os Templates.");
                 Configure();
             }
@@ -40,7 +40,18 @@ namespace TemplateLoader
         {
             Console.WriteLine("-".PadRight(30, '-'));
             Console.WriteLine($"Pasta que contém os templates: {Settings.TemplateFolder}");
-            Console.WriteLine("-".PadRight(30, '-'));            
+            Console.WriteLine("-".PadRight(30, '-'));
+        }
+
+        public void ListTemplates()
+        {
+            var arquivos = Directory.GetFiles(Settings.TemplateFolder);
+            Console.WriteLine("Templates disponíveis:");
+            foreach (var (index, item) in arquivos.Index())
+                {
+                    Console.WriteLine($"{index.ToString().PadLeft(2)} | {Path.GetFileName(item)}");
+                }
+            Console.WriteLine("-".PadRight(15, '-'));
         }
     }
 }
