@@ -25,7 +25,7 @@ var templateLoader = new Templater();
 var menuMain = new MainMenu();
 menuMain.AddMenuItem("Copiar Template");
 menuMain.AddMenuItem("Listar Templates existentes", templateLoader.ListTemplates);
-menuMain.AddMenuItem("Adicionar Novo Template");
+menuMain.AddMenuItem("Adicionar Novo Template", templateLoader.AddTemplate);
 
 var menuConfigs = menuMain.AddSubMenu("Configurações");
 menuConfigs.AddMenuItem("Configurar Pasta de Templates", templateLoader.Configure);
