@@ -60,7 +60,7 @@ namespace TemplateLoader
         public void AddTemplate()
         {
             Console.WriteLine("Informe Arquivo ou pasta que deseja adicionar ao Template:");
-            var sourceTemplatePath = Console.ReadLine()?.Replace('"', '\0');
+            var sourceTemplatePath = Console.ReadLine()?.Replace("\"", "");
             string description;
             do
             {
