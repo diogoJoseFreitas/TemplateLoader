@@ -7,7 +7,12 @@ namespace TemplateLoader
         private AppSettings Settings;
         private IConfigManager Manager;
 
-        private List<string> TemplateFolders;
+        private List<string> TemplateFolders {
+            get
+            {
+                return Directory.GetDirectories(Settings.TemplateFolder).ToList();
+            }
+        }
 
         public Templater()
         {
@@ -18,7 +23,6 @@ namespace TemplateLoader
                 Configure();
             }
             Settings = Manager.ReadConfig()!;
-            TemplateFolders = Directory.GetDirectories(Settings.TemplateFolder).ToList();
         }
 
         public void Configure()
@@ -48,7 +52,6 @@ namespace TemplateLoader
 
         public void ListTemplates()
         {
-            TemplateFolders = Directory.GetDirectories(Settings.TemplateFolder).ToList();
             Console.WriteLine("Templates disponíveis:");
             foreach (var (index, item) in TemplateFolders.Index())
             {
