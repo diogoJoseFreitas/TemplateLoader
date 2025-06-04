@@ -90,6 +90,18 @@ namespace TemplateLoader
 
             Console.WriteLine("Template adicionado com sucesso!");
         }
+        public void LoadTemplate()
+        {
+            var list = TemplateFolders.AsEnumerable().Select(row => Path.GetFileName(row)).ToList();
+            var n = list.ListAndPickItem();
+            
+            Console.WriteLine("-".PadRight(15, '-'));
+            Console.WriteLine($"Opção Selecionada: {list[n]}");
+
+
+        }
+
+
         private static void CopyDirectory(string sourceDir, string destDir)
         {
             // Create destination directory if it doesn't exist
