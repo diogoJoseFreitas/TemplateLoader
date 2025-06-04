@@ -1,6 +1,7 @@
 using TemplateLoader.Menus;
 using TemplateLoader.Utils;
 using TemplateLoader.Settings;
+using System.Reflection;
 
 namespace TemplateLoader
 {
@@ -92,13 +93,21 @@ namespace TemplateLoader
         }
         public void LoadTemplate()
         {
-            var list = TemplateFolders.AsEnumerable().Select(row => Path.GetFileName(row)).ToList();
+            var temp = TemplateFolders;
+            if (temp.Count == 0)
+            {
+                Console.WriteLine("Nenhum template disponível, verifique configurações.");
+                return;
+            }
+            var list = temp.AsEnumerable().Select(row => Path.GetFileName(row)).ToList();
             var n = list.ListAndPickItem();
-            
+
             Console.WriteLine("-".PadRight(15, '-'));
             Console.WriteLine($"Opção Selecionada: {list[n]}");
+            Console.WriteLine($"iniciando cópia do Template para local do executável...");
 
-
+            string destino = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            CopyDirectory(temp[n], Directory.GetCurrentDirectory());
         }
 
 

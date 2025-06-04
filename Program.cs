@@ -23,7 +23,7 @@ Console.WriteLine("-".PadRight(30, '-'));
 var templateLoader = new Templater();
 
 var menuMain = new MainMenu();
-menuMain.AddMenuItem("Copiar Template");
+menuMain.AddMenuItem("Copiar Template", templateLoader.LoadTemplate);
 menuMain.AddMenuItem("Listar Templates existentes", templateLoader.ListTemplates);
 menuMain.AddMenuItem("Adicionar Novo Template", templateLoader.AddTemplate);
 
