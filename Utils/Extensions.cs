@@ -2,15 +2,21 @@ namespace TemplateLoader.Utils
 {
     public static class Extensions
     {
-        public static int ListAndPickItem<T>(this List<T> options)
+        public static void ListItems<T>(this List<T> options, int limit = -1)
+        {
+            var lenght = (limit > 0 && limit < options.Count) ? limit : options.Count;
+            for (int index = 0; index < lenght; index++)
+            {
+                Console.WriteLine($"{index,2} | {options[index]}");
+            }
+
+        }
+        public static int ListAndPickIndex<T>(this List<T> options)
         {
             int selectedOption;
             do
             {
-                for (int index = 0; index < options.Count; index ++)
-                {
-                    Console.WriteLine($"{index,2} | {options[index]}");
-                }
+                options.ListItems();
 
                 Console.WriteLine("-".PadRight(15, '-'));
                 Console.WriteLine("Selecione uma opção: ");
