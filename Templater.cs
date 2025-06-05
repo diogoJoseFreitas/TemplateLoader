@@ -29,7 +29,7 @@ namespace TemplateLoader
             do
             {
                 Console.WriteLine("Informe o Caminho da pasta que deseja Configurar: ");
-                folderPath = Console.ReadLine();
+                folderPath = Console.ReadLine().Replace("\"", "");
 
                 if (Path.Exists(folderPath)) break;
 
