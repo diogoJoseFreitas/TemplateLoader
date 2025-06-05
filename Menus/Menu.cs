@@ -10,12 +10,11 @@ namespace TemplateLoader.Menus
         {
             do
             {
-            var n = Itens.ListAndPickItem();
-            var item = Itens[n];
+                var item = Itens.ListAndPickItem();
             
-            Console.WriteLine($"Opção Selecionada: {item}");
-            Console.WriteLine("-".PadRight(15, '-'));
-            item.Action?.Invoke();
+                Console.WriteLine($"Opção Selecionada: {item}");
+                Console.WriteLine("-".PadRight(15, '-'));
+                item.Action?.Invoke();
                 
             } while (true);
         }
