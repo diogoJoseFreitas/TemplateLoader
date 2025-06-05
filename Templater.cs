@@ -100,15 +100,35 @@ namespace TemplateLoader
                 return;
             }
             var list = temp.AsEnumerable().Select(row => Path.GetFileName(row)).ToList();
-            var n = list.ListAndPickItem();
+            var nTemplate = list.ListAndPickIndex();
 
             Console.WriteLine("-".PadRight(15, '-'));
-            Console.WriteLine($"Opção Selecionada: {list[n]}");
-            Console.WriteLine($"iniciando cópia do Template para local do executável...");
+            Console.WriteLine($"Opção Selecionada: {list[nTemplate]}");
 
-            string destino = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            Console.WriteLine($"Destino: {destino}");
-            CopyDirectory(temp[n], destino);
+            Console.WriteLine("Informe a pasta onde deseja Copiar o template: ");
+            Settings.PathsHistory.ListItems(5);
+            var pasta = Console.ReadLine()?.Replace("\"", "");
+
+            int nHistory;
+            if (int.TryParse(pasta, out nHistory))
+                pasta = Settings.PathsHistory[nHistory];
+
+            if (!Directory.Exists(pasta))
+            {
+                Console.WriteLine("Pasta informada não encontrada, tente novamente!");
+                return;
+            }
+
+            Console.WriteLine($"iniciando cópia do Template para a pasta indicada...");
+            Settings.AddPath(pasta);
+            Manager.WriteConfig(Settings);
+            CopyDirectory(temp[nTemplate], pasta);
+        }
+
+        public void DumpHistory()
+        {
+            Settings.PathsHistory = new List<string>();
+            Manager.WriteConfig(Settings);
         }
 
 
