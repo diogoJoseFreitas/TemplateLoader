@@ -31,5 +31,22 @@ namespace TemplateLoader.Utils
             } while (true);
             return -1;
         }
+
+        public static T ListAndPickItem<T>(this List<T> options) {
+            T selectedOption;
+            do
+            {
+                options.ListItems();
+
+                Console.WriteLine("-".PadRight(15, '-'));
+                Console.WriteLine("Selecione uma opção: ");
+                var answer = Console.ReadLine();
+                int n;
+                if (int.TryParse(answer, out n) && n >= 0 && n < options.Count)
+                    return options[n];
+
+                Console.WriteLine("Opção inválida, por favor escolha uma das opções listadas a seguir.");
+            } while (true);
+        }
     }
 }
