@@ -30,6 +30,7 @@ menuMain.AddMenuItem("Adicionar Novo Template", templateLoader.AddTemplate);
 var menuConfigs = menuMain.AddSubMenu("Configurações");
 menuConfigs.AddMenuItem("Configurar Pasta de Templates", templateLoader.Configure);
 menuConfigs.AddMenuItem("Listar Configurações atuais", templateLoader.ListConfigs);
+menuConfigs.AddMenuItem("Limpar Histórico de Pastas", templateLoader.DumpHistory);
 
 
 menuMain.Show();
