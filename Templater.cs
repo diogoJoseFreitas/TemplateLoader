@@ -86,7 +86,7 @@ namespace TemplateLoader
             else if (Directory.Exists(sourceTemplatePath))
             {
                 string destDir = Path.Combine(newTemplateDir, Path.GetFileName(sourceTemplatePath));
-                CopyDirectory(sourceTemplatePath, destDir);
+                CopyDirectory(sourceTemplatePath, newTemplateDir);
             }
 
             Console.WriteLine("Template adicionado com sucesso!");
@@ -107,7 +107,8 @@ namespace TemplateLoader
             Console.WriteLine($"iniciando cópia do Template para local do executável...");
 
             string destino = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            CopyDirectory(temp[n], Directory.GetCurrentDirectory());
+            Console.WriteLine($"Destino: {destino}");
+            CopyDirectory(temp[n], destino);
         }
 
 
